@@ -90,12 +90,6 @@ function create-laravel-project
 	composer create-project --prefer-dist laravel/laravel $1
 }
 
-function create-laravel-project-setup-cloud9
-{
-	cloud9-set-public-index-site $1
-	create-laravel-project $1
-}
-
 function main
 {
 	case "$1" in
