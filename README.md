@@ -33,12 +33,7 @@ $ ./smug --prepare --laravel-all
     ```bash
     $ ./smug --prepare --phpmyadmin
     ```
-    
-    - Install **NPM**:
-    ```bash
-    $ ./smug --prepare --npm
-    ```
-    
+
     - Install **Laravel Installer**:
     ```bash
     $ ./smug --prepare --laravel-installer
