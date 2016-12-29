@@ -18,33 +18,33 @@ $ ./smug --help
 ```
 
 ### Prepare Workspace
-* Install/Update **PHP 7.0**, **PHPMyAdmin**, **Laravel Installer** (through Composer Package Manager) and **NPM**.
+* Install/Update **PHP 7.0**, **PHPMyAdmin**, **Laravel Installer** (through Composer Package Manager) and **NPM**:
 ```bash
 $ ./smug --prepare --laravel-all
 ```
 
 * Installing individually:
-- Install **PHP 7.0**:
+    - Install **PHP 7.0**:
 ```bash
 $ ./smug --prepare --php7.0
 ```
 
-- Install **PHPMyAdmin** (MySQL connection, by default):
+    - Install **PHPMyAdmin** (MySQL connection, by default):
 ```bash
 $ ./smug --prepare --phpmyadmin
 ```
 
-- Install **NPM**:
+    - Install **NPM**:
 ```bash
 $ ./smug --prepare --npm
 ```
 
-- Install **Laravel Installer**:
+    - Install **Laravel Installer**:
 ```bash
 $ ./smug --prepare --laravel-installer
 ```
 
-- Install **NPM**:
+    - Install **NPM**:
 ```bash
 $ ./smug --prepare --npm
 ```
