@@ -29,7 +29,7 @@ $ ./smug --prepare --laravel-all
     $ ./smug --prepare --php7.0
     ```
     
-    - Install **PHPMyAdmin** (MySQL connection, by default):
+	- Install **PHPMyAdmin** (MySQL connection, by default):
     ```bash
     $ ./smug --prepare --phpmyadmin
     ```
