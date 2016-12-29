@@ -5,7 +5,7 @@ It allows the automation in the **installation/update** of some software, such a
 
 The Smug was designed for not to be installable, for simplicity. Is only a **Shell Script**.
 
-## Smug Installation 
+## Clone Smug repository
 ```bash
 $ git clone https://github.com/cristiancmello/smug.git
 ```
