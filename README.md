@@ -52,16 +52,16 @@ $ ./smug --prepare --laravel-all
 ### Project Creation
 * Create Laravel Project (*with* Cloud9's public index folder path configuration):
 ```bash
-    $ ./smug --create --laravel-project --public-index-folder **<project_name>**
+    $ ./smug --create --laravel-project --public-index-folder <project_name>
 ```
 
 * Create Laravel Project (*without* Cloud9's public index folder path configuration):
 ```bash
-    $ ./smug --create --laravel-project **<project_name>**
+    $ ./smug --create --laravel-project <project_name>
 ```
 
 ### Workspace Configuration
-* Configure cloud9's public index folder path:
+* Configure Cloud9's public index folder path:
 ```bash
-    $ ./smug --configure --public-index-folder **<folder_name>**
+    $ ./smug --configure --public-index-folder <folder_name>
 ```
