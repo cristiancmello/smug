@@ -24,30 +24,30 @@ $ ./smug --prepare --laravel-all
 ```
 
 * Installing individually:
-    - Install **PHP 7.0**:
-    ```bash
-    $ ./smug --prepare --php7.0
-    ```
-    
-    - Install **PHPMyAdmin** (MySQL connection, by default):
-    ```bash
-    $ ./smug --prepare --phpmyadmin
-    ```
-    
-    - Install **NPM**:
-    ```bash
-    $ ./smug --prepare --npm
-    ```
-    
-    - Install **Laravel Installer**:
-    ```bash
-    $ ./smug --prepare --laravel-installer
-    ```
-    
-    - Install **NPM**:
-    ```bash
-    $ ./smug --prepare --npm
-    ```
+- Install **PHP 7.0**:
+```bash
+$ ./smug --prepare --php7.0
+```
+
+- Install **PHPMyAdmin** (MySQL connection, by default):
+```bash
+$ ./smug --prepare --phpmyadmin
+```
+
+- Install **NPM**:
+```bash
+$ ./smug --prepare --npm
+```
+
+- Install **Laravel Installer**:
+```bash
+$ ./smug --prepare --laravel-installer
+```
+
+- Install **NPM**:
+```bash
+$ ./smug --prepare --npm
+```
     
 ### Project Creation
 * Create Laravel Project (*with* Cloud9's public index folder path configuration):
