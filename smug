@@ -19,9 +19,15 @@ function smug-ascii-art
                            "
 }
 
+function smug-version
+{
+	echo -e "${TXT_FG_COLOR_GREEN}Smug${TXT_NORMAL} version ${TXT_FG_COLOR_YELLOW}1.0.0${TXT_NORMAL}"
+}
+
 function configure-help
 {
 	smug-ascii-art
+	smug-version
 	echo -e "${TXT_FG_COLOR_YELLOW}Usage: ${TXT_NORMAL}smug [--help | --prepare | --create | --configure]\n"
 	echo -e "${TXT_FG_COLOR_YELLOW}Options: ${TXT_NORMAL}"
 	echo -e "\t${TXT_FG_COLOR_GREEN}--help${TXT_NORMAL}\t\t\t\t\tShow help information."
@@ -147,6 +153,9 @@ function main
 				--public-index-folder)
 					cloud9-set-public-index-site $3
 					;;
+					
+				*)
+					configure-help
 			esac
 			;;
 			
