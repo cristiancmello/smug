@@ -1,0 +1,185 @@
+#!/bin/bash
+# smug
+# Smug is a command line utility for Unix-like operating system. It allows the automation in the installation of some software, such as PHP 7.0, PHPMyAdmin and Laravel Installer in the Cloud9 workspaces.
+
+TXT_FG_COLOR_GREEN='\e[32m'
+TXT_FG_COLOR_YELLOW='\e[33m'
+TXT_NORMAL='\e[0m'
+
+function smug-ascii-art
+{
+	echo -e "
+  ________ ___ __ __  ____ 
+ / ___/   |   |  |  |/    |
+(   \_| _   _ |  |  |   __|
+ \__  |  \_/  |  |  |  |  |
+ /  \ |   |   |  :  |  |_ |
+ \    |   |   |     |     |
+  \___|___|___|\__,_|___,_|
+                           "
+}
+
+function configure-help
+{
+	smug-ascii-art
+	echo -e "${TXT_FG_COLOR_YELLOW}Usage: ${TXT_NORMAL}smug [--help | --prepare | --create | --configure]\n"
+	echo -e "${TXT_FG_COLOR_YELLOW}Options: ${TXT_NORMAL}"
+	echo -e "\t${TXT_FG_COLOR_GREEN}--help${TXT_NORMAL}\t\t\t\t\tShow help information."
+	echo -e "\t${TXT_FG_COLOR_GREEN}--prepare${TXT_NORMAL} [--php7.0 | --phpmyadmin | --npm | --laravel-installer | --laravel-all]"
+	echo -e "\t\t${TXT_FG_COLOR_GREEN}--php7.0${TXT_NORMAL}\t\t\tInstall PHP 7.0"
+	echo -e "\t\t${TXT_FG_COLOR_GREEN}--phpmyadmin${TXT_NORMAL}\t\t\tInstall PHPMyAdmin"
+	echo -e "\t\t${TXT_FG_COLOR_GREEN}--npm${TXT_NORMAL}\t\t\t\tInstall npm"
+	echo -e "\t\t${TXT_FG_COLOR_GREEN}--laravel-installer${TXT_NORMAL}\t\tInstall Laravel Installer with Composer Package Manager"
+	echo -e "\t\t${TXT_FG_COLOR_GREEN}--laravel-all${TXT_NORMAL}\t\t\tInstall PHP 7.0, PHPMyAdmin, Laravel Installer and npm\n"
+	echo -e "\t${TXT_FG_COLOR_GREEN}--create${TXT_NORMAL} [--laravel-project | [--laravel-project --public-index-folder]]"
+	echo -e "\t\t${TXT_FG_COLOR_GREEN}--laravel-project${TXT_NORMAL} <project_name>\t\t\tCreate a Laravel project."
+	echo -e "\t\t${TXT_FG_COLOR_GREEN}--laravel-project --public-index-folder${TXT_NORMAL} <project_name>\tCreate a Laravel project and configure cloud9's public index folder path.\n"
+	echo -e "\t${TXT_FG_COLOR_GREEN}--configure${TXT_NORMAL} [--public-index-folder]"
+	echo -e "\t\t${TXT_FG_COLOR_GREEN}--public-index-folder${TXT_NORMAL} <folder_name>\t\t\tConfigure Cloud9's public index folder path.\n"
+}
+
+function install-php-7.0
+{
+	sudo add-apt-repository -y ppa:ondrej/php
+	sudo apt-get update
+	sudo apt-get install -y libapache2-mod-php7.0
+	sudo a2dismod php5
+	sudo a2enmod php7.0
+	sudo apt-get install -y php7.0-dom
+	sudo apt-get install -y php7.0-mbstring
+	sudo apt-get install -y php7.0-zip
+	sudo apt-get install -y php7.0-mysql
+}
+
+function install-phpmyadmin
+{
+	sudo phpmyadmin-ctl install
+}
+
+function install-npm
+{
+	sudo npm install -g n
+	sudo n latest
+	sudo npm install -g npm
+}
+
+function install-laravel-installer
+{
+	sudo composer global require 'laravel/installer'
+}
+
+# Instalação do PHP 7, phpmyadmin e atualização do npm e installer do Laravel
+function install-step-1
+{
+	sudo add-apt-repository -y ppa:ondrej/php
+	sudo apt-get update
+	sudo apt-get install -y libapache2-mod-php7.0
+	sudo a2dismod php5
+	sudo a2enmod php7.0
+	sudo apt-get install -y php7.0-dom
+	sudo apt-get install -y php7.0-mbstring
+	sudo apt-get install -y php7.0-zip
+	sudo apt-get install -y php7.0-mysql
+	sudo phpmyadmin-ctl install
+	sudo composer global require 'laravel/installer'
+	sudo npm install -g n
+	sudo n latest
+	sudo npm install -g npm
+}
+
+function cloud9-set-public-index-site
+{
+	# Configuração do Apache para o acesso ao diretório público do projeto Laravel
+	sudo sed -r "s/DocumentRoot(.)*/DocumentRoot \/home\/ubuntu\/workspace\/${1}\/public/g" /etc/apache2/sites-available/001-cloud9.conf > 001-cloud9.conf.tmp \
+		&& sudo rm /etc/apache2/sites-available/001-cloud9.conf \
+		&& sudo mv 001-cloud9.conf.tmp /etc/apache2/sites-available/001-cloud9.conf
+		
+	echo -e "\e[32mPublic index folder '${1}/public' was set up with success!"
+}
+
+function create-laravel-project
+{
+	cd ..
+	composer create-project --prefer-dist laravel/laravel $1
+	
+	# Sair do script dentro da pasta do projeto criada
+	cd $1
+}
+
+function create-laravel-project-setup-cloud9
+{
+	cloud9-set-public-index-site $1
+	create-laravel-project $1
+}
+
+function main
+{
+	case "$1" in
+		--prepare)
+			case "$2" in
+				--php7.0)
+					install-php-7.0
+					;;
+					
+				--phpmyadmin)
+					install-phpmyadmin
+					;;
+					
+				--npm)
+					install-npm
+					;;
+					
+				--laravel-installer)
+					install-laravel-installer
+					;;
+					
+				--laravel-all)
+					install-php-7.0
+					install-phpmyadmin
+					install-npm
+					install-laravel-installer
+					;;
+				
+				*)
+					configure-help
+			esac
+			;;
+		
+		--create)
+			case "$2" in
+				--laravel-project)
+					case "$3" in
+						--public-index-folder)
+							create-laravel-project $4
+							cloud9-set-public-index-site $4
+							;;
+							
+						*)
+							create-laravel-project $3
+					esac
+					;;
+				
+				*)
+					configure-help
+			esac
+			;;
+			
+		--configure)
+			case "$2" in
+				--public-index-folder)
+					cloud9-set-public-index-site $3
+					;;
+			esac
+			;;
+			
+		--help)
+			configure-help
+			;;
+			
+		*)
+			configure-help
+			exit 1
+	esac
+}
+
+main $1 $2 $3 $4 $5
