@@ -35,6 +35,7 @@ function configure-help
 	echo -e "\t\t${TXT_FG_COLOR_GREEN}--php7.0${TXT_NORMAL}\t\t\tInstall PHP 7.0"
 	echo -e "\t\t${TXT_FG_COLOR_GREEN}--phpmyadmin${TXT_NORMAL}\t\t\tInstall PHPMyAdmin"
 	echo -e "\t\t${TXT_FG_COLOR_GREEN}--npm${TXT_NORMAL}\t\t\t\tInstall npm"
+	echo -e "\t\t${TXT_FG_COLOR_GREEN}--node${TXT_NORMAL}\t\t\tInstall/Update Node.js 6.9.4 LTS"
 	echo -e "\t\t${TXT_FG_COLOR_GREEN}--laravel-installer${TXT_NORMAL}\t\tInstall Laravel Installer with Composer Package Manager"
 	echo -e "\t\t${TXT_FG_COLOR_GREEN}--laravel-all${TXT_NORMAL}\t\t\tInstall PHP 7.0, PHPMyAdmin, Laravel Installer and npm\n"
 	echo -e "\t${TXT_FG_COLOR_GREEN}--create${TXT_NORMAL} [--laravel-project | [--laravel-project --public-index-folder]]"
@@ -67,6 +68,13 @@ function install-npm
 	sudo npm install -g n
 	sudo n latest
 	sudo npm install -g npm
+}
+
+function install-node694
+{
+	nvm install 6.9.4
+	nvm use 6.9.4
+	nvm alias default v6.9.4
 }
 
 function install-laravel-installer
@@ -105,6 +113,10 @@ function main
 					
 				--npm)
 					install-npm
+					;;
+					
+				--node)
+					install-node694
 					;;
 					
 				--laravel-installer)
