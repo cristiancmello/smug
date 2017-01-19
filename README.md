@@ -44,7 +44,7 @@ $ ./smug --prepare --laravel-all
     $ ./smug --prepare --npm
     ```
     
-    - Install/Setup **Node.js 6.9.4 LTS**:
+    - Install/Update **Node.js 6.9.4 LTS**:
     ```bash
     $ ./smug --prepare --node
     ```
