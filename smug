@@ -72,6 +72,8 @@ function install-npm
 
 function install-node694
 {
+	export NVM_DIR=~/.nvm
+	source ~/.nvm/nvm.sh
 	nvm install 6.9.4
 	nvm use 6.9.4
 	nvm alias default v6.9.4
