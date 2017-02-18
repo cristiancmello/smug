@@ -24,7 +24,7 @@ $ ./smug --prepare --laravel-all
 ```
 
 * Installing individually:
-    - Install **PHP 7.0**:
+    - Install **PHP 7.0** (with **php7.0-sqlite3** and **php7.0-mysql**):
     ```bash
     $ ./smug --prepare --php7.0
     ```
