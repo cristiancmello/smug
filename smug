@@ -21,7 +21,7 @@ function smug-ascii-art
 
 function smug-version
 {
-	echo -e "${TXT_FG_COLOR_GREEN}Smug${TXT_NORMAL} version ${TXT_FG_COLOR_YELLOW}1.0.0${TXT_NORMAL}"
+	echo -e "${TXT_FG_COLOR_GREEN}Smug${TXT_NORMAL} version ${TXT_FG_COLOR_YELLOW}1.1.0${TXT_NORMAL}"
 }
 
 function configure-help
@@ -34,10 +34,11 @@ function configure-help
 	echo -e "\t${TXT_FG_COLOR_GREEN}--prepare${TXT_NORMAL} [--php7.0 | --phpmyadmin | --npm | --laravel-installer | --laravel-all]"
 	echo -e "\t\t${TXT_FG_COLOR_GREEN}--php7.0${TXT_NORMAL}\t\t\tInstall PHP 7.0"
 	echo -e "\t\t${TXT_FG_COLOR_GREEN}--phpmyadmin${TXT_NORMAL}\t\t\tInstall PHPMyAdmin"
-	echo -e "\t\t${TXT_FG_COLOR_GREEN}--npm${TXT_NORMAL}\t\t\t\tInstall npm"
-	echo -e "\t\t${TXT_FG_COLOR_GREEN}--node${TXT_NORMAL}\t\t\tInstall/Update Node.js 6.9.4 LTS"
+	echo -e "\t\t${TXT_FG_COLOR_GREEN}--npm${TXT_NORMAL}\t\t\t\tInstall NPM"
+	echo -e "\t\t${TXT_FG_COLOR_GREEN}--node${TXT_NORMAL}\t\t\t\tInstall/Update Node.js 6.9.4 LTS"
 	echo -e "\t\t${TXT_FG_COLOR_GREEN}--laravel-installer${TXT_NORMAL}\t\tInstall Laravel Installer with Composer Package Manager"
-	echo -e "\t\t${TXT_FG_COLOR_GREEN}--laravel-all${TXT_NORMAL}\t\t\tInstall PHP 7.0, PHPMyAdmin, Laravel Installer and npm\n"
+	echo -e "\t\t${TXT_FG_COLOR_GREEN}--laravel-all${TXT_NORMAL}\t\t\tInstall PHP 7.0, PHPMyAdmin, Laravel 5.4 Installer and NPM"
+	echo -e "\t\t${TXT_FG_COLOR_GREEN}--mongo${TXT_NORMAL}\t\t\t\tInstall MongoDB 2.6.12\n"
 	echo -e "\t${TXT_FG_COLOR_GREEN}--create${TXT_NORMAL} [--laravel-project | [--laravel-project --public-index-folder]]"
 	echo -e "\t\t${TXT_FG_COLOR_GREEN}--laravel-project${TXT_NORMAL} <project_name>\t\t\tCreate a Laravel project."
 	echo -e "\t\t${TXT_FG_COLOR_GREEN}--laravel-project --public-index-folder${TXT_NORMAL} <project_name>\tCreate a Laravel project and configure cloud9's public index folder path.\n"
@@ -80,6 +81,14 @@ function install-node694
 	nvm alias default v6.9.4
 }
 
+function install-mongodb
+{
+	sudo apt-get install -y mongodb-org
+	mkdir -p ~/workspace/mongodb && mkdir -p ~/workspace/mongodb/data
+	echo 'mongod --bind_ip=$IP --dbpath=/home/ubuntu/workspace/mongodb/data --nojournal --rest "$@"' > ~/workspace/mongodb/mongod
+	sudo chmod a+x ~/workspace/mongodb/mongod
+}
+
 function install-laravel-installer
 {
 	sudo composer global require 'laravel/installer'
@@ -101,6 +110,37 @@ function create-laravel-project
 	composer create-project --prefer-dist laravel/laravel $1
 }
 
+function start-mongodb
+{
+	MONGODB_PID=$(pidof mongod)
+	
+	{
+		nohup ~/workspace/mongodb/mongod & > /dev/null
+	} &> /dev/null
+	
+	# String $MONGODO_PID is not null (-n)
+	if [ -n "$MONGODB_PID" ]; then
+		echo 'Failed to start Mongodb! Reason: MongoDB already started.'
+		exit
+	fi
+	 
+	echo 'MongoDB started successfully!'
+}
+
+function shutdown-mongodb
+{
+	MONGODB_PID=$(pidof mongod)
+	
+	# String $MONGODO_PID is null (-z)
+	if [ -z "$MONGODB_PID" ]; then
+		echo "Failed to shutdown MongoDB! Reason: MongoDB wasn't started."
+		exit
+	fi
+	
+	kill -SIGTERM $(pidof mongod)
+	echo 'MongoDB terminated successfully!'
+}
+
 function main
 {
 	case "$1" in
@@ -120,6 +160,10 @@ function main
 					
 				--node)
 					install-node694
+					;;
+					
+				--mongo)
+					install-mongodb
 					;;
 					
 				--laravel-installer)
@@ -161,6 +205,28 @@ function main
 			case "$2" in
 				--public-index-folder)
 					cloud9-set-public-index-site $3
+					;;
+					
+				*)
+					configure-help
+			esac
+			;;
+			
+		--start)
+			case "$2" in
+				--mongo)
+					start-mongodb
+					;;
+					
+				*)
+					configure-help
+			esac
+			;;
+			
+		--shutdown)
+			case "$2" in
+				--mongo)
+					shutdown-mongodb
 					;;
 					
 				*)
