@@ -1,7 +1,7 @@
 # Smug
 Smug is a command line utility for Unix-like operating system. 
 It allows the automation in the **installation/update** of some software, such as **PHP 7.0**, 
-**PHPMyAdmin**, **NPM**, **Node.js** and **Laravel Installer** in the **Cloud9 workspaces**.
+**PHPMyAdmin**, **NPM**, **Node.js** and **Laravel 5.4 Installer** in the **Cloud9 workspaces**.
 
 The Smug was designed for not to be installable, for simplicity. Is only a **Shell Script**.
 
@@ -18,7 +18,7 @@ $ ./smug --help
 ```
 
 ### Prepare Workspace
-* Install/Update **PHP 7.0**, **PHPMyAdmin**, **Laravel Installer** (through Composer Package Manager) and **NPM**:
+* Install/Update **PHP 7.0**, **PHPMyAdmin**, **Laravel 5.4 Installer** (through Composer Package Manager) and **NPM**:
 ```bash
 $ ./smug --prepare --laravel-all
 ```
@@ -34,12 +34,12 @@ $ ./smug --prepare --laravel-all
     $ ./smug --prepare --phpmyadmin
     ```
 
-    - Install **Laravel Installer**:
+    - Install **Laravel 5.4 Installer**:
     ```bash
     $ ./smug --prepare --laravel-installer
     ```
     
-    - Install **NPM**:
+    - Install/Update **NPM**:
     ```bash
     $ ./smug --prepare --npm
     ```
