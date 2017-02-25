@@ -1,7 +1,7 @@
 # Smug
 Smug is a command line utility for Unix-like operating system. 
 It allows the automation in the **installation/update** of some software, such as **PHP 7.0**, 
-**PHPMyAdmin**, **NPM**, **Node.js** and **Laravel 5.4 Installer** in the **Cloud9 workspaces**.
+**PHPMyAdmin**, **NPM**, **MongoDB**, **Node.js** and **Laravel 5.4 Installer** in the **Cloud9 workspaces**.
 
 The Smug was designed for not to be installable, for simplicity. Is only a **Shell Script**.
 
@@ -52,16 +52,32 @@ $ ./smug --prepare --laravel-all
 ### Project Creation
 * Create Laravel Project (*with* Cloud9's public index folder path configuration):
 ```bash
-    $ ./smug --create --laravel-project --public-index-folder <project_name>
+$ ./smug --create --laravel-project --public-index-folder <project_name>
 ```
 
 * Create Laravel Project (*without* Cloud9's public index folder path configuration):
 ```bash
-    $ ./smug --create --laravel-project <project_name>
+$ ./smug --create --laravel-project <project_name>
 ```
 
 ### Workspace Configuration
 * Configure Cloud9's public index folder path:
 ```bash
-    $ ./smug --configure --public-index-folder <folder_name>
+$ ./smug --configure --public-index-folder <folder_name>
+```
+
+### MongoDB
+- Install **MongoDB 2.6.12**:
+```bash
+$ ./smug --prepare --mongo
+```
+
+- Start MongoDB service:
+```bash
+$ ./smug --start mongo
+```
+
+- Shutdown MongoDB service:
+```bash
+$ ./smug --shutdown mongo
 ```
