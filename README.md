@@ -1,12 +1,9 @@
 # Smug
 Smug is a command line utility for Unix-like operating system. 
 It allows the automation in the **installation/update** of some software, such as **PHP 7.2**, 
-**PHPMyAdmin**, **NPM**, **MongoDB**, **Node.js** and **Laravel 5.4 Installer** in the **Cloud9 workspaces**.
+**PHPMyAdmin**, **NPM**, **MongoDB**, **Node.js** and **Laravel 5.5 LTS Installer** in the **Cloud9 workspaces**.
 
 The Smug was designed for not to be installable, for simplicity. Is only a **Shell Script**.
-
-**Bug: Laravel 5.4: Specified key was too long error.**
-[https://laravel-news.com/laravel-5-4-key-too-long-error](https://laravel-news.com/laravel-5-4-key-too-long-error)
 
 ## Clone Smug repository
 ```bash
@@ -21,7 +18,7 @@ $ ./smug --help
 ```
 
 ### Prepare Workspace
-* Install/Update **PHP 7.2**, **PHPMyAdmin**, **Laravel 5.4 Installer** (through Composer Package Manager) and **NPM**:
+* Install/Update **PHP 7.2**, **PHPMyAdmin**, **Laravel 5.5 LTS Installer** (through Composer Package Manager) and **NPM**:
 ```bash
 $ ./smug --prepare --laravel-all
 ```
@@ -37,7 +34,7 @@ $ ./smug --prepare --laravel-all
     $ ./smug --prepare --phpmyadmin
     ```
 
-    - Install **Laravel 5.4 Installer**:
+    - Install **Laravel 5.5 LTS Installer**:
     ```bash
     $ ./smug --prepare --laravel-installer
     ```
