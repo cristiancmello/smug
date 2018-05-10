@@ -1,12 +1,9 @@
 # Smug
 Smug is a command line utility for Unix-like operating system. 
-It allows the automation in the **installation/update** of some software, such as **PHP 7.0**, 
-**PHPMyAdmin**, **NPM**, **MongoDB**, **Node.js** and **Laravel 5.4 Installer** in the **Cloud9 workspaces**.
+It allows the automation in the **installation/update** of some software, such as **PHP 7.2**, 
+**PHPMyAdmin**, **NPM**, **MongoDB**, **Node.js** and **Laravel 5.5 LTS Installer** in the **Cloud9 workspaces**.
 
 The Smug was designed for not to be installable, for simplicity. Is only a **Shell Script**.
-
-**Bug: Laravel 5.4: Specified key was too long error.**
-[https://laravel-news.com/laravel-5-4-key-too-long-error](https://laravel-news.com/laravel-5-4-key-too-long-error)
 
 ## Clone Smug repository
 ```bash
@@ -21,15 +18,15 @@ $ ./smug --help
 ```
 
 ### Prepare Workspace
-* Install/Update **PHP 7.0**, **PHPMyAdmin**, **Laravel 5.4 Installer** (through Composer Package Manager) and **NPM**:
+* Install/Update **PHP 7.2**, **PHPMyAdmin**, **Laravel 5.5 LTS Installer** (through Composer Package Manager) and **NPM**:
 ```bash
 $ ./smug --prepare --laravel-all
 ```
 
 * Installing individually:
-    - Install **PHP 7.0** (with **php7.0-sqlite3** and **php7.0-mysql**):
+    - Install **PHP 7.2** (with **php7.2-sqlite3** and **php7.2-mysql**):
     ```bash
-    $ ./smug --prepare --php7.0
+    $ ./smug --prepare --php7.2
     ```
     
 	- Install **PHPMyAdmin** (MySQL connection, by default):
@@ -37,7 +34,7 @@ $ ./smug --prepare --laravel-all
     $ ./smug --prepare --phpmyadmin
     ```
 
-    - Install **Laravel 5.4 Installer**:
+    - Install **Laravel 5.5 LTS Installer**:
     ```bash
     $ ./smug --prepare --laravel-installer
     ```
@@ -47,7 +44,7 @@ $ ./smug --prepare --laravel-all
     $ ./smug --prepare --npm
     ```
     
-    - Install/Update **Node.js 6.9.4 LTS**:
+    - Install/Update **Node.js 8.11.1 LTS**:
     ```bash
     $ ./smug --prepare --node
     ```
