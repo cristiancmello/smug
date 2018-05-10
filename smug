@@ -1,6 +1,6 @@
 #!/bin/bash
 # smug
-# Smug is a command line utility for Unix-like operating system. It allows the automation in the installation of some software, such as PHP 7.0, PHPMyAdmin and Laravel Installer in the Cloud9 workspaces.
+# Smug is a command line utility for Unix-like operating system. It allows the automation in the installation of some software, such as PHP 7.2, PHPMyAdmin and Laravel Installer in the Cloud9 workspaces.
 
 TXT_FG_COLOR_GREEN='\e[32m'
 TXT_FG_COLOR_YELLOW='\e[33m'
@@ -31,13 +31,13 @@ function configure-help
 	echo -e "${TXT_FG_COLOR_YELLOW}Usage: ${TXT_NORMAL}smug [--help | --prepare | --create | --configure]\n"
 	echo -e "${TXT_FG_COLOR_YELLOW}Options: ${TXT_NORMAL}"
 	echo -e "\t${TXT_FG_COLOR_GREEN}--help${TXT_NORMAL}\t\t\t\t\tShow help information."
-	echo -e "\t${TXT_FG_COLOR_GREEN}--prepare${TXT_NORMAL} [--php7.0 | --phpmyadmin | --npm | --laravel-installer | --laravel-all]"
-	echo -e "\t\t${TXT_FG_COLOR_GREEN}--php7.0${TXT_NORMAL}\t\t\tInstall PHP 7.0"
+	echo -e "\t${TXT_FG_COLOR_GREEN}--prepare${TXT_NORMAL} [--php7.2 | --phpmyadmin | --npm | --laravel-installer | --laravel-all]"
+	echo -e "\t\t${TXT_FG_COLOR_GREEN}--php7.2${TXT_NORMAL}\t\t\tInstall PHP 7.2"
 	echo -e "\t\t${TXT_FG_COLOR_GREEN}--phpmyadmin${TXT_NORMAL}\t\t\tInstall PHPMyAdmin"
 	echo -e "\t\t${TXT_FG_COLOR_GREEN}--npm${TXT_NORMAL}\t\t\t\tInstall NPM"
-	echo -e "\t\t${TXT_FG_COLOR_GREEN}--node${TXT_NORMAL}\t\t\t\tInstall/Update Node.js 6.9.4 LTS"
+	echo -e "\t\t${TXT_FG_COLOR_GREEN}--node${TXT_NORMAL}\t\t\t\tInstall/Update Node.js 8.11.1 LTS"
 	echo -e "\t\t${TXT_FG_COLOR_GREEN}--laravel-installer${TXT_NORMAL}\t\tInstall Laravel Installer with Composer Package Manager"
-	echo -e "\t\t${TXT_FG_COLOR_GREEN}--laravel-all${TXT_NORMAL}\t\t\tInstall PHP 7.0, PHPMyAdmin, Laravel 5.4 Installer and NPM"
+	echo -e "\t\t${TXT_FG_COLOR_GREEN}--laravel-all${TXT_NORMAL}\t\t\tInstall PHP 7.2, PHPMyAdmin, Laravel 5.4 Installer and NPM"
 	echo -e "\t\t${TXT_FG_COLOR_GREEN}--mongo${TXT_NORMAL}\t\t\t\tInstall MongoDB 2.6.12\n"
 	echo -e "\t${TXT_FG_COLOR_GREEN}--create${TXT_NORMAL} [--laravel-project | [--laravel-project --public-index-folder]]"
 	echo -e "\t\t${TXT_FG_COLOR_GREEN}--laravel-project${TXT_NORMAL} <project_name>\t\t\tCreate a Laravel project."
@@ -46,18 +46,18 @@ function configure-help
 	echo -e "\t\t${TXT_FG_COLOR_GREEN}--public-index-folder${TXT_NORMAL} <folder_name>\t\t\tConfigure Cloud9's public index folder path.\n"
 }
 
-function install-php-7.0
+function install-php-7.2
 {
 	sudo add-apt-repository -y ppa:ondrej/php
 	sudo apt-get update
-	sudo apt-get install -y libapache2-mod-php7.0
+	sudo apt-get install -y libapache2-mod-php7.2
 	sudo a2dismod php5
-	sudo a2enmod php7.0
-	sudo apt-get install -y php7.0-dom
-	sudo apt-get install -y php7.0-mbstring
-	sudo apt-get install -y php7.0-zip
-	sudo apt-get install -y php7.0-mysql
-	sudo apt-get install -y php7.0-sqlite3
+	sudo a2enmod php7.2
+	sudo apt-get install -y php7.2-dom
+	sudo apt-get install -y php7.2-mbstring
+	sudo apt-get install -y php7.2-zip
+	sudo apt-get install -y php7.2-mysql
+	sudo apt-get install -y php7.2-sqlite3
 }
 
 function install-phpmyadmin
@@ -72,13 +72,13 @@ function install-npm
 	sudo npm install -g npm
 }
 
-function install-node694
+function install-node8111
 {
 	export NVM_DIR=~/.nvm
 	source ~/.nvm/nvm.sh
-	nvm install 6.9.4
-	nvm use 6.9.4
-	nvm alias default v6.9.4
+	nvm install 8.11.1
+	nvm use 8.11.1
+	nvm alias default v8.11.1
 }
 
 function install-mongodb
@@ -146,8 +146,8 @@ function main
 	case "$1" in
 		--prepare)
 			case "$2" in
-				--php7.0)
-					install-php-7.0
+				--php7.2)
+					install-php-7.2
 					;;
 					
 				--phpmyadmin)
@@ -159,7 +159,7 @@ function main
 					;;
 					
 				--node)
-					install-node694
+					install-node8111
 					;;
 					
 				--mongo)
@@ -171,7 +171,7 @@ function main
 					;;
 					
 				--laravel-all)
-					install-php-7.0
+					install-php-7.2
 					install-phpmyadmin
 					install-npm
 					install-laravel-installer
