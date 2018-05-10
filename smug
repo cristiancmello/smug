@@ -58,6 +58,13 @@ function install-php-7.2
 	sudo apt-get install -y php7.2-zip
 	sudo apt-get install -y php7.2-mysql
 	sudo apt-get install -y php7.2-sqlite3
+	
+	chown-to-ubuntu-composer-cache-folder
+}
+
+function chown-to-ubuntu-composer-cache-folder
+{
+	sudo chown -R ubuntu:ubuntu /home/ubuntu/.composer
 }
 
 function install-phpmyadmin
