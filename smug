@@ -58,8 +58,6 @@ function install-php-7.2
 	sudo apt-get install -y php7.2-zip
 	sudo apt-get install -y php7.2-mysql
 	sudo apt-get install -y php7.2-sqlite3
-	
-	chown-to-ubuntu-composer-cache-folder
 }
 
 function chown-to-ubuntu-composer-cache-folder
@@ -174,6 +172,7 @@ function main
 					;;
 					
 				--laravel-installer)
+					chown-to-ubuntu-composer-cache-folder
 					install-laravel-installer
 					;;
 					
@@ -181,6 +180,7 @@ function main
 					install-php-7.2
 					install-phpmyadmin
 					install-npm
+					chown-to-ubuntu-composer-cache-folder
 					install-laravel-installer
 					;;
 				
@@ -194,11 +194,13 @@ function main
 				--laravel-project)
 					case "$3" in
 						--public-index-folder)
+							chown-to-ubuntu-composer-cache-folder
 							create-laravel-project $4
 							cloud9-set-public-index-site $4
 							;;
 							
 						*)
+							chown-to-ubuntu-composer-cache-folder
 							create-laravel-project $3
 					esac
 					;;
