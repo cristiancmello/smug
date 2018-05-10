@@ -37,7 +37,7 @@ function configure-help
 	echo -e "\t\t${TXT_FG_COLOR_GREEN}--npm${TXT_NORMAL}\t\t\t\tInstall NPM"
 	echo -e "\t\t${TXT_FG_COLOR_GREEN}--node${TXT_NORMAL}\t\t\t\tInstall/Update Node.js 8.11.1 LTS"
 	echo -e "\t\t${TXT_FG_COLOR_GREEN}--laravel-installer${TXT_NORMAL}\t\tInstall Laravel Installer with Composer Package Manager"
-	echo -e "\t\t${TXT_FG_COLOR_GREEN}--laravel-all${TXT_NORMAL}\t\t\tInstall PHP 7.2, PHPMyAdmin, Laravel 5.4 Installer and NPM"
+	echo -e "\t\t${TXT_FG_COLOR_GREEN}--laravel-all${TXT_NORMAL}\t\t\tInstall PHP 7.2, PHPMyAdmin, Laravel 5.5 LTS Installer and NPM"
 	echo -e "\t\t${TXT_FG_COLOR_GREEN}--mongo${TXT_NORMAL}\t\t\t\tInstall MongoDB 2.6.12\n"
 	echo -e "\t${TXT_FG_COLOR_GREEN}--create${TXT_NORMAL} [--laravel-project | [--laravel-project --public-index-folder]]"
 	echo -e "\t\t${TXT_FG_COLOR_GREEN}--laravel-project${TXT_NORMAL} <project_name>\t\t\tCreate a Laravel project."
@@ -107,7 +107,7 @@ function cloud9-set-public-index-site
 function create-laravel-project
 {
 	cd ..
-	composer create-project --prefer-dist laravel/laravel $1
+	composer create-project --prefer-dist laravel/laravel $1 "5.5.*"
 }
 
 function start-mongodb
