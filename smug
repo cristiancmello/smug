@@ -179,7 +179,7 @@ function main
 				--laravel-all)
 					install-php-7.2
 					install-phpmyadmin
-					install-npm
+					install-node8111
 					chown-to-ubuntu-composer-cache-folder
 					install-laravel-installer
 					;;
