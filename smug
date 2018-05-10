@@ -21,7 +21,7 @@ function smug-ascii-art
 
 function smug-version
 {
-	echo -e "${TXT_FG_COLOR_GREEN}Smug${TXT_NORMAL} version ${TXT_FG_COLOR_YELLOW}1.1.0${TXT_NORMAL}"
+	echo -e "${TXT_FG_COLOR_GREEN}Smug${TXT_NORMAL} version ${TXT_FG_COLOR_YELLOW}1.2.0${TXT_NORMAL}"
 }
 
 function configure-help
