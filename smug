@@ -2,6 +2,8 @@
 # smug
 # Smug is a command line utility for Unix-like operating system. It allows the automation in the installation of some software, such as PHP 7.2, PHPMyAdmin and Laravel Installer in the Cloud9 workspaces.
 
+NODE_VERSION=8.12.0
+
 TXT_FG_COLOR_GREEN='\e[32m'
 TXT_FG_COLOR_YELLOW='\e[33m'
 TXT_NORMAL='\e[0m'
@@ -35,7 +37,7 @@ function configure-help
 	echo -e "\t\t${TXT_FG_COLOR_GREEN}--php7.2${TXT_NORMAL}\t\t\tInstall PHP 7.2"
 	echo -e "\t\t${TXT_FG_COLOR_GREEN}--phpmyadmin${TXT_NORMAL}\t\t\tInstall PHPMyAdmin"
 	echo -e "\t\t${TXT_FG_COLOR_GREEN}--npm${TXT_NORMAL}\t\t\t\tInstall NPM"
-	echo -e "\t\t${TXT_FG_COLOR_GREEN}--node${TXT_NORMAL}\t\t\t\tInstall/Update Node.js 8.11.1 LTS"
+	echo -e "\t\t${TXT_FG_COLOR_GREEN}--node${TXT_NORMAL}\t\t\t\tInstall/Update Node.js ${NODE_VERSION} LTS"
 	echo -e "\t\t${TXT_FG_COLOR_GREEN}--laravel-installer${TXT_NORMAL}\t\tInstall Laravel Installer with Composer Package Manager"
 	echo -e "\t\t${TXT_FG_COLOR_GREEN}--laravel-all${TXT_NORMAL}\t\t\tInstall PHP 7.2, PHPMyAdmin, Laravel 5.5 LTS Installer and NPM"
 	echo -e "\t\t${TXT_FG_COLOR_GREEN}--mongo${TXT_NORMAL}\t\t\t\tInstall MongoDB 2.6.12\n"
@@ -77,13 +79,13 @@ function install-npm
 	sudo npm install -g npm
 }
 
-function install-node8111
+function install-node
 {
 	export NVM_DIR=~/.nvm
 	source ~/.nvm/nvm.sh
-	nvm install 8.11.1
-	nvm use 8.11.1
-	nvm alias default v8.11.1
+	nvm install $NODE_VERSION
+	nvm use $NODE_VERSION
+	nvm alias default $NODE_VERSION
 }
 
 function install-mongodb
@@ -164,7 +166,7 @@ function main
 					;;
 					
 				--node)
-					install-node8111
+					install-node
 					;;
 					
 				--mongo)
@@ -179,7 +181,7 @@ function main
 				--laravel-all)
 					install-php-7.2
 					install-phpmyadmin
-					install-node8111
+					install-node
 					chown-to-ubuntu-composer-cache-folder
 					install-laravel-installer
 					;;
