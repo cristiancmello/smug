@@ -1,9 +1,10 @@
 # Smug
-Smug is a command line utility for Unix-like operating system. 
-It allows the automation in the **installation/update** of some software, such as **PHP 7.2**, 
+Smug is a command line utility for Linux operating systems that support the APT package management system (Ubuntu, Debian, and Mint, by default).
+
+It supports the automated **installation/update** of some software, such as **PHP 7.2**, 
 **PHPMyAdmin**, **NPM**, **MongoDB**, **Node.js** and **Laravel 5.5 LTS Installer** in the **Cloud9 workspaces**.
 
-The Smug was designed for not to be installable, for simplicity. Is only a **Shell Script**.
+Smug was not designed to be installable, for simplicity. Is only a **Shell Script**.
 
 ## Clone Smug repository
 ```bash
