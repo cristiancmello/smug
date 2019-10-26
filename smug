@@ -1,258 +1,87 @@
 #!/bin/bash
-# smug
-# Smug is a command line utility for Unix-like operating system. It allows the automation in the installation of some software, such as PHP 7.2, PHPMyAdmin and Laravel Installer in the Cloud9 workspaces.
 
-NODE_VERSION=8.12.0
+DEBUG=true
 
-TXT_FG_COLOR_GREEN='\e[32m'
-TXT_FG_COLOR_YELLOW='\e[33m'
-TXT_NORMAL='\e[0m'
-
-function smug-ascii-art
-{
-	echo -e "
-  ________ ___ __ __  ____ 
- / ___/   |   |  |  |/    |
-(   \_| _   _ |  |  |   __|
- \__  |  \_/  |  |  |  |  |
- /  \ |   |   |  :  |  |_ |
- \    |   |   |     |     |
-  \___|___|___|\__,_|___,_|
-                           "
+debug_latest_cmd() {
+  FNNAME=$1
+  RETURN=$2
+  
+  if [[ "$DEBUG" == true ]]; then
+    echo ">>> ${FNNAME} exit with $RETURN"
+  fi
 }
 
-function smug-version
-{
-	echo -e "${TXT_FG_COLOR_GREEN}Smug${TXT_NORMAL} version ${TXT_FG_COLOR_YELLOW}1.2.0${TXT_NORMAL}"
+debug_print() {
+  if [[ "$DEBUG" == true ]]; then
+    echo $@
+  fi
 }
 
-function configure-help
-{
-	smug-ascii-art
-	smug-version
-	echo -e "${TXT_FG_COLOR_YELLOW}Usage: ${TXT_NORMAL}smug [--help | --prepare | --create | --configure]\n"
-	echo -e "${TXT_FG_COLOR_YELLOW}Options: ${TXT_NORMAL}"
-	echo -e "\t${TXT_FG_COLOR_GREEN}--help${TXT_NORMAL}\t\t\t\t\tShow help information."
-	echo -e "\t${TXT_FG_COLOR_GREEN}--prepare${TXT_NORMAL} [--php7.2 | --phpmyadmin | --npm | --laravel-installer | --laravel-all]"
-	echo -e "\t\t${TXT_FG_COLOR_GREEN}--php7.2${TXT_NORMAL}\t\t\tInstall PHP 7.2"
-	echo -e "\t\t${TXT_FG_COLOR_GREEN}--phpmyadmin${TXT_NORMAL}\t\t\tInstall PHPMyAdmin"
-	echo -e "\t\t${TXT_FG_COLOR_GREEN}--npm${TXT_NORMAL}\t\t\t\tInstall NPM"
-	echo -e "\t\t${TXT_FG_COLOR_GREEN}--node${TXT_NORMAL}\t\t\t\tInstall/Update Node.js ${NODE_VERSION} LTS"
-	echo -e "\t\t${TXT_FG_COLOR_GREEN}--laravel-installer${TXT_NORMAL}\t\tInstall Laravel Installer with Composer Package Manager"
-	echo -e "\t\t${TXT_FG_COLOR_GREEN}--laravel-all${TXT_NORMAL}\t\t\tInstall PHP 7.2, PHPMyAdmin, Laravel 5.5 LTS Installer and NPM"
-	echo -e "\t\t${TXT_FG_COLOR_GREEN}--mongo${TXT_NORMAL}\t\t\t\tInstall MongoDB 2.6.12\n"
-	echo -e "\t${TXT_FG_COLOR_GREEN}--create${TXT_NORMAL} [--laravel-project | [--laravel-project --public-index-folder]]"
-	echo -e "\t\t${TXT_FG_COLOR_GREEN}--laravel-project${TXT_NORMAL} <project_name>\t\t\tCreate a Laravel project."
-	echo -e "\t\t${TXT_FG_COLOR_GREEN}--laravel-project --public-index-folder${TXT_NORMAL} <project_name>\tCreate a Laravel project and configure cloud9's public index folder path.\n"
-	echo -e "\t${TXT_FG_COLOR_GREEN}--configure${TXT_NORMAL} [--public-index-folder]"
-	echo -e "\t\t${TXT_FG_COLOR_GREEN}--public-index-folder${TXT_NORMAL} <folder_name>\t\t\tConfigure Cloud9's public index folder path.\n"
+debug_print_func_exec() {
+  debug_print ">>> $1 executed"
 }
 
-function install-php-7.2
-{
-	sudo add-apt-repository -y ppa:ondrej/php
-	sudo apt-get update
-	sudo apt-get install -y libapache2-mod-php7.2
-	sudo a2dismod php5
-	sudo a2enmod php7.2
-	sudo apt-get install -y php7.2-dom
-	sudo apt-get install -y php7.2-mbstring
-	sudo apt-get install -y php7.2-zip
-	sudo apt-get install -y php7.2-mysql
-	sudo apt-get install -y php7.2-sqlite3
+detect_os() {
+  debug_print "OSTYPE=$OSTYPE"
+  
+  case "$OSTYPE" in
+    "linux-gnu")
+      echo "0"
+      ;;
+    *)
+      echo "-1"
+  esac
+  
+  debug_print_func_exec ${FUNCNAME[0]}
 }
 
-function chown-to-ubuntu-composer-cache-folder
-{
-	sudo chown -R ubuntu:ubuntu /home/ubuntu/.composer
+detect_linux_distro() {
+  source /etc/os-release
+  
+  debug_print $(cat /etc/os-release)
+  debug_print "PRETTY_NAME=\"$PRETTY_NAME\""
+  
+  case "$PRETTY_NAME" in
+    "Amazon Linux AMI 2018.03")
+      echo "0"
+      ;;
+    *)
+      echo "-1"
+  esac
+  
+  debug_print_func_exec ${FUNCNAME[0]}
 }
 
-function install-phpmyadmin
-{
-	sudo phpmyadmin-ctl install
+setup_php73() {
+  sudo yum install -y \
+    php73 \
+    php73-devel \
+    php73-mysql \
+    php73-pdo \
+    php73-mbstring \
+    php73-gd \
+    php73-xml \
+    php73-xmlrpc \
+    php73-mcrypt \
+    php-pear
+    
+  debug_latest_cmd ${FUNCNAME[0]} $?
 }
 
-function install-npm
-{
-	sudo npm install -g n
-	sudo n latest
-	sudo npm install -g npm
+remove_php_already_installed() {
+  sudo yum remove -y httpd* php* php-common* php-cli*
+  
+  debug_latest_cmd ${FUNCNAME[0]} $?
 }
 
-function install-node
-{
-	export NVM_DIR=~/.nvm
-	source ~/.nvm/nvm.sh
-	nvm install $NODE_VERSION
-	nvm use $NODE_VERSION
-	nvm alias default $NODE_VERSION
-}
+detect_os_result=$(detect_os)
+debug_print $detect_os_result
 
-function install-mongodb
-{
-	sudo apt-get install -y mongodb-org
-	mkdir -p ~/workspace/mongodb && mkdir -p ~/workspace/mongodb/data
-	echo 'mongod --bind_ip=$IP --dbpath=/home/ubuntu/workspace/mongodb/data --nojournal --rest "$@"' > ~/workspace/mongodb/mongod
-	sudo chmod a+x ~/workspace/mongodb/mongod
-}
+detect_linux_distro_result=$(detect_linux_distro)
+debug_print $detect_linux_distro_result
 
-function install-laravel-installer
-{
-	sudo composer global require 'laravel/installer'
-}
+remove_php_already_installed_result=$(remove_php_already_installed)
+debug_print -e $remove_php_already_installed_result
 
-function cloud9-set-public-index-site
-{
-	# Config 001-cloud9.conf (Apache)
-	sudo sed -r "s/DocumentRoot(.)*/DocumentRoot \/home\/ubuntu\/workspace\/${1}\/public/g" /etc/apache2/sites-available/001-cloud9.conf > 001-cloud9.conf.tmp \
-		&& sudo rm /etc/apache2/sites-available/001-cloud9.conf \
-		&& sudo mv 001-cloud9.conf.tmp /etc/apache2/sites-available/001-cloud9.conf
-		
-	echo -e "\e[32mPublic index folder '${1}/public' was set up with success!"
-}
-
-function create-laravel-project
-{
-	cd ..
-	composer create-project --prefer-dist laravel/laravel $1 "5.5.*"
-}
-
-function start-mongodb
-{
-	MONGODB_PID=$(pidof mongod)
-	
-	{
-		nohup ~/workspace/mongodb/mongod & > /dev/null
-	} &> /dev/null
-	
-	# String $MONGODO_PID is not null (-n)
-	if [ -n "$MONGODB_PID" ]; then
-		echo 'Failed to start Mongodb! Reason: MongoDB already started.'
-		exit
-	fi
-	 
-	echo 'MongoDB started successfully!'
-}
-
-function shutdown-mongodb
-{
-	MONGODB_PID=$(pidof mongod)
-	
-	# String $MONGODO_PID is null (-z)
-	if [ -z "$MONGODB_PID" ]; then
-		echo "Failed to shutdown MongoDB! Reason: MongoDB wasn't started."
-		exit
-	fi
-	
-	kill -SIGTERM $(pidof mongod)
-	echo 'MongoDB terminated successfully!'
-}
-
-function main
-{
-	case "$1" in
-		--prepare)
-			case "$2" in
-				--php7.2)
-					install-php-7.2
-					;;
-					
-				--phpmyadmin)
-					install-phpmyadmin
-					;;
-					
-				--npm)
-					install-npm
-					;;
-					
-				--node)
-					install-node
-					;;
-					
-				--mongo)
-					install-mongodb
-					;;
-					
-				--laravel-installer)
-					chown-to-ubuntu-composer-cache-folder
-					install-laravel-installer
-					;;
-					
-				--laravel-all)
-					install-php-7.2
-					install-phpmyadmin
-					install-node
-					chown-to-ubuntu-composer-cache-folder
-					install-laravel-installer
-					;;
-				
-				*)
-					configure-help
-			esac
-			;;
-		
-		--create)
-			case "$2" in
-				--laravel-project)
-					case "$3" in
-						--public-index-folder)
-							chown-to-ubuntu-composer-cache-folder
-							create-laravel-project $4
-							cloud9-set-public-index-site $4
-							;;
-							
-						*)
-							chown-to-ubuntu-composer-cache-folder
-							create-laravel-project $3
-					esac
-					;;
-				
-				*)
-					configure-help
-			esac
-			;;
-			
-		--configure)
-			case "$2" in
-				--public-index-folder)
-					cloud9-set-public-index-site $3
-					;;
-					
-				*)
-					configure-help
-			esac
-			;;
-			
-		--start)
-			case "$2" in
-				mongo)
-					start-mongodb
-					;;
-					
-				*)
-					configure-help
-			esac
-			;;
-			
-		--shutdown)
-			case "$2" in
-				mongo)
-					shutdown-mongodb
-					;;
-					
-				*)
-					configure-help
-			esac
-			;;
-			
-		--help)
-			configure-help
-			;;
-			
-		*)
-			configure-help
-			exit 1
-	esac
-}
-
-main $1 $2 $3 $4 $5
+setup_php73_result=$(setup_php73)
+debug_print -e $setup_php73_result
