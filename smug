@@ -1,6 +1,7 @@
 #!/bin/bash
 
-DEBUG=true
+DEBUG=$SMUG_DEBUG
+LINUX_OSRELEASE_PRETTY_NAME=
 
 debug_latest_cmd() {
   FNNAME=$1
@@ -43,7 +44,9 @@ detect_linux_distro() {
   
   case "$PRETTY_NAME" in
     "Amazon Linux AMI 2018.03")
-      echo "0"
+      LINUX_OSRELEASE_PRETTY_NAME=$PRETTY_NAME
+      
+      debug_print "LINUX_OSRELEASE_PRETTY_NAME=$LINUX_OSRELEASE_PRETTY_NAME"
       ;;
     *)
       echo "-1"
@@ -52,36 +55,53 @@ detect_linux_distro() {
   debug_print_func_exec ${FUNCNAME[0]}
 }
 
+yum_update() {
+  sudo yum -y update
+  
+  debug_print_func_exec ${FUNCNAME[0]}
+}
+
 setup_php73() {
-  sudo yum install -y \
-    php73 \
-    php73-devel \
-    php73-mysql \
-    php73-pdo \
-    php73-mbstring \
-    php73-gd \
-    php73-xml \
-    php73-xmlrpc \
-    php73-mcrypt \
-    php-pear
-    
-  debug_latest_cmd ${FUNCNAME[0]} $?
+  OSRELEASE_PRETTY_NAME="$1"
+  debug_print "!!!!!!!$OSRELEASE_PRETTY_NAME"
+  
+  case "$OSRELEASE_PRETTY_NAME" in
+    "Amazon Linux AMI 2018.03")
+      sudo yum install -y \
+        php73 \
+        php73-bcmath \
+        php73-devel \
+        php73-mysql \
+        php73-mysqlnd \
+        php73-pdo \
+        php73-mbstring \
+        php73-gd \
+        php73-xml \
+        php73-xmlrpc \
+        php73-mcrypt \
+        php73-process \
+        php73-json \
+        php73-embedded \
+        mod_php73 \
+        php-pear
+      ;;
+    *)
+      exit -1
+  esac
+  
+  debug_print_func_exec ${FUNCNAME[0]}
 }
 
 remove_php_already_installed() {
-  sudo yum remove -y httpd* php* php-common* php-cli*
+  sudo yum remove -y httpd* php* mod_php*
   
-  debug_latest_cmd ${FUNCNAME[0]} $?
+  debug_print_func_exec ${FUNCNAME[0]}
 }
 
-detect_os_result=$(detect_os)
-debug_print $detect_os_result
+detect_os
+detect_linux_distro
+yum_update
+remove_php_already_installed
+setup_php73 "$LINUX_OSRELEASE_PRETTY_NAME"
 
-detect_linux_distro_result=$(detect_linux_distro)
-debug_print $detect_linux_distro_result
-
-remove_php_already_installed_result=$(remove_php_already_installed)
-debug_print -e $remove_php_already_installed_result
-
-setup_php73_result=$(setup_php73)
-debug_print -e $setup_php73_result
+export SMUG_DEBUG=false
